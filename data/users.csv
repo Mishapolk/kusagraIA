@@ -1,0 +1,3 @@
+id,username,password,isAdmin
+1,alice,pass123,false
+2,admin,adminpass,true

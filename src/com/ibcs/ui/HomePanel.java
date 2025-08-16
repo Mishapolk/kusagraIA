@@ -1,0 +1,59 @@
+package com.ibcs.ui;
+
+import com.ibcs.db.BookDatabase;
+import com.ibcs.db.BookmarkDatabase;
+import com.ibcs.model.Book;
+import com.ibcs.model.User;
+
+import javax.swing.*;
+import javax.swing.border.EmptyBorder;
+import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.GridLayout;
+import java.util.Collections;
+import java.util.List;
+
+public class HomePanel extends JPanel {
+    public HomePanel(MainFrame frame, BookDatabase bookDb, BookmarkDatabase bookmarkDb, User user) {
+        setLayout(new BorderLayout());
+        JPanel top = new JPanel();
+        top.setBackground(new Color(240,248,255));
+        top.setBorder(new EmptyBorder(10,10,10,10));
+        JButton searchBtn = new JButton("Search");
+        JButton recommendBtn = new JButton("Recommendations");
+        JButton bookmarkBtn = new JButton("Bookmarks");
+        JButton profileBtn = new JButton("Profile");
+        JButton logoutBtn = new JButton("Logout");
+        top.add(searchBtn);
+        top.add(recommendBtn);
+        top.add(bookmarkBtn);
+        top.add(profileBtn);
+        if (user.isAdmin()) {
+            JButton adminBtn = new JButton("Admin");
+            top.add(adminBtn);
+            adminBtn.addActionListener(e -> frame.showAdmin());
+        }
+        top.add(logoutBtn);
+        add(top, BorderLayout.NORTH);
+
+        JPanel booksPanel = new JPanel();
+        booksPanel.setLayout(new GridLayout(0,1));
+        booksPanel.setBorder(new EmptyBorder(10,10,10,10));
+        add(new JScrollPane(booksPanel), BorderLayout.CENTER);
+
+        List<Book> all = bookDb.getAll();
+        Collections.shuffle(all);
+        for (int i=0; i<Math.min(3, all.size()); i++) {
+            Book b = all.get(i);
+            JButton btn = new JButton(b.toString());
+            booksPanel.add(btn);
+            btn.addActionListener(e -> frame.showBookDetail(b));
+        }
+
+        searchBtn.addActionListener(e -> frame.showSearch());
+        recommendBtn.addActionListener(e -> frame.showRecommendations());
+        bookmarkBtn.addActionListener(e -> frame.showBookmarks());
+        profileBtn.addActionListener(e -> frame.showProfile());
+        logoutBtn.addActionListener(e -> frame.logout());
+    }
+}

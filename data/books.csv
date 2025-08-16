@@ -1,0 +1,11 @@
+id,title,author,genre,page_count,rating,language
+1,1984,George Orwell,Sci-Fi,328,4.8,English
+2,The Hobbit,J.R.R. Tolkien,Fantasy,310,4.7,English
+3,To Kill a Mockingbird,Harper Lee,Fiction,281,4.9,English
+4,The Girl with the Dragon Tattoo,Stieg Larsson,Mystery,465,4.5,English
+5,Brief Answers to the Big Questions,Stephen Hawking,Non-Fiction,256,4.6,English
+6,Dune,Frank Herbert,Sci-Fi,412,4.8,English
+7,The Name of the Wind,Patrick Rothfuss,Fantasy,662,4.7,English
+8,Sapiens,Yuval Noah Harari,Non-Fiction,498,4.6,English
+9,The Da Vinci Code,Dan Brown,Mystery,454,4.4,English
+10,The Martian,Andy Weir,Sci-Fi,369,4.8,English

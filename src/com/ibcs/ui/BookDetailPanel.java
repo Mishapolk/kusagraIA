@@ -8,6 +8,8 @@ import com.ibcs.model.User;
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import java.awt.*;
+import javax.imageio.ImageIO;
+import java.awt.image.BufferedImage;
 import java.io.IOException;
 
 public class BookDetailPanel extends JPanel {
@@ -35,10 +37,10 @@ public class BookDetailPanel extends JPanel {
 
         JLabel cover = new JLabel();
         try {
-            ImageIcon icon = new ImageIcon(new java.net.URL(book.getImageUrl()));
-            Image scaled = icon.getImage().getScaledInstance(150, 220, Image.SCALE_SMOOTH);
+            BufferedImage original = ImageIO.read(new java.net.URL(book.getImageUrl()));
+            Image scaled = original.getScaledInstance(150, 220, Image.SCALE_SMOOTH);
             cover.setIcon(new ImageIcon(scaled));
-        } catch (Exception ignored) {}
+        } catch (Exception ignored) { }
         left.add(cover, BorderLayout.CENTER);
 
         JPanel meta = new JPanel(new BorderLayout());

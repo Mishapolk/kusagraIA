@@ -7,6 +7,8 @@ import javax.swing.border.EmptyBorder;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import javax.imageio.ImageIO;
+import java.awt.image.BufferedImage;
 import java.net.URL;
 
 /**
@@ -25,10 +27,10 @@ public class BookCard extends JPanel {
 
         JLabel img = new JLabel();
         try {
-            ImageIcon icon = new ImageIcon(new URL(book.getImageUrl()));
-            Image scaled = icon.getImage().getScaledInstance(120, 180, Image.SCALE_SMOOTH);
+            BufferedImage original = ImageIO.read(new URL(book.getImageUrl()));
+            Image scaled = original.getScaledInstance(120, 180, Image.SCALE_SMOOTH);
             img.setIcon(new ImageIcon(scaled));
-        } catch (Exception ignored) {}
+        } catch (Exception ignored) { }
         add(img, BorderLayout.CENTER);
 
         JLabel title = new JLabel("<html><div style='text-align:center;color:white;'>" + book.getTitle() + "</div></html>", SwingConstants.CENTER);

@@ -63,19 +63,20 @@ public class SearchPanel extends JPanel {
 
         searchBtn.addActionListener(e -> {
             model.clear();
-            List<Book> results;
-            String q = searchField.getText();
+            String q = searchField.getText().toLowerCase();
+            String genre = (String)genreBox.getSelectedItem();
+            if (genre != null && genre.isEmpty()) genre = null;
+            String author = authorField.getText();
+            if (author.isBlank()) author = null;
+            String lang = langField.getText();
+            if (lang.isBlank()) lang = null;
+            double rating = (double) ratingSpinner.getValue();
+            List<Book> results = bookDb.filter(genre, lang, author, rating);
             if (!q.isBlank()) {
-                results = bookDb.search(q);
-            } else {
-                String genre = (String)genreBox.getSelectedItem();
-                if (genre != null && genre.isEmpty()) genre = null;
-                String author = authorField.getText();
-                if (author.isBlank()) author = null;
-                String lang = langField.getText();
-                if (lang.isBlank()) lang = null;
-                double rating = (double) ratingSpinner.getValue();
-                results = bookDb.filter(genre, lang, author, rating);
+                results = results.stream().filter(b ->
+                        b.getTitle().toLowerCase().contains(q) ||
+                        b.getAuthor().toLowerCase().contains(q))
+                        .collect(java.util.stream.Collectors.toList());
             }
 
             String sort = (String) sortBox.getSelectedItem();
@@ -87,16 +88,8 @@ public class SearchPanel extends JPanel {
 
             for (Book b: results) model.addElement(b);
 
-            String logQuery;
-            if (!q.isBlank()) {
-                logQuery = q;
-            } else {
-                String genre = (String)genreBox.getSelectedItem();
-                String author = authorField.getText();
-                String lang = langField.getText();
-                double rating = (double) ratingSpinner.getValue();
-                logQuery = String.format("genre=%s,author=%s,lang=%s,rating>=%.1f", genre, author, lang, rating);
-            }
+            String logQuery = String.format("q=%s,genre=%s,author=%s,lang=%s,rating>=%.1f",
+                    q, genre, author, lang, rating);
             try {
                 searchLogDb.log(user.getId(), logQuery);
             } catch (IOException ex) {

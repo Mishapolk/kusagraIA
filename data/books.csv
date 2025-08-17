@@ -1,11 +1,16 @@
-id,title,author,genre,page_count,rating,language
-1,1984,George Orwell,Sci-Fi,328,4.8,English
-2,The Hobbit,J.R.R. Tolkien,Fantasy,310,4.7,English
-3,To Kill a Mockingbird,Harper Lee,Fiction,281,4.9,English
-4,The Girl with the Dragon Tattoo,Stieg Larsson,Mystery,465,4.5,English
-5,Brief Answers to the Big Questions,Stephen Hawking,Non-Fiction,256,4.6,English
-6,Dune,Frank Herbert,Sci-Fi,412,4.8,English
-7,The Name of the Wind,Patrick Rothfuss,Fantasy,662,4.7,English
-8,Sapiens,Yuval Noah Harari,Non-Fiction,498,4.6,English
-9,The Da Vinci Code,Dan Brown,Mystery,454,4.4,English
-10,The Martian,Andy Weir,Sci-Fi,369,4.8,English
+id,title,author,genre,page_count,rating,language,description,image_url
+1,1984,George Orwell,Sci-Fi,328,4.8,English,Dystopian future where Big Brother watches all,https://covers.openlibrary.org/b/id/7222246-L.jpg
+2,The Hobbit,J.R.R. Tolkien,Fantasy,310,4.7,English,Halfling Bilbo joins a quest to reclaim a lost kingdom,https://covers.openlibrary.org/b/id/6979861-L.jpg
+3,To Kill a Mockingbird,Harper Lee,Fiction,281,4.9,English,A lawyer defends an innocent man in a divided town,https://covers.openlibrary.org/b/id/8228691-L.jpg
+4,The Girl with the Dragon Tattoo,Stieg Larsson,Mystery,465,4.5,English,Journalist and hacker hunt a missing woman,https://covers.openlibrary.org/b/id/8091016-L.jpg
+5,Brief Answers to the Big Questions,Stephen Hawking,Non-Fiction,256,4.6,English,Scientist reflects on the universe and humanity,https://covers.openlibrary.org/b/id/9255027-L.jpg
+6,Dune,Frank Herbert,Sci-Fi,412,4.8,English,Young noble navigates politics on desert world Arrakis,https://covers.openlibrary.org/b/id/9251080-L.jpg
+7,The Name of the Wind,Patrick Rothfuss,Fantasy,662,4.7,English,Kvothe recounts his life of magic and music,https://covers.openlibrary.org/b/id/8231990-L.jpg
+8,Sapiens,Yuval Noah Harari,Non-Fiction,498,4.6,English,History of humankind from ancient to modern times,https://covers.openlibrary.org/b/id/8167892-L.jpg
+9,The Da Vinci Code,Dan Brown,Mystery,454,4.4,English,Thriller unraveling secrets of a religious conspiracy,https://covers.openlibrary.org/b/id/240726-L.jpg
+10,The Martian,Andy Weir,Sci-Fi,369,4.8,English,Astronaut stranded on Mars fights to survive,https://covers.openlibrary.org/b/id/8372586-L.jpg
+11,Pride and Prejudice,Jane Austen,Fiction,279,4.6,English,Bennet sisters seek love amid social expectations,https://covers.openlibrary.org/b/id/8091010-L.jpg
+12,The Alchemist,Paulo Coelho,Fiction,208,4.5,English,Shepherd travels the world to follow his dream,https://covers.openlibrary.org/b/id/8128692-L.jpg
+13,The Catcher in the Rye,J.D. Salinger,Fiction,214,4.0,English,Teenager Holden wanders New York in search of meaning,https://covers.openlibrary.org/b/id/8231993-L.jpg
+14,The Great Gatsby,F. Scott Fitzgerald,Fiction,180,4.3,English,Wealth and illusion in the roaring twenties,https://covers.openlibrary.org/b/id/7222276-L.jpg
+15,Harry Potter and the Sorcerer's Stone,J.K. Rowling,Fantasy,309,4.8,English,Boy discovers he is a wizard and attends Hogwarts,https://covers.openlibrary.org/b/id/7888783-L.jpg

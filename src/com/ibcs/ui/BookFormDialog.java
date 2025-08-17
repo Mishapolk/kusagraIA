@@ -13,6 +13,8 @@ public class BookFormDialog extends JDialog {
     private JTextField pagesField = new JTextField(5);
     private JTextField ratingField = new JTextField(5);
     private JTextField langField = new JTextField(5);
+    private JTextField descField = new JTextField(20);
+    private JTextField imageField = new JTextField(20);
     private boolean ok = false;
 
     public BookFormDialog(JFrame owner, Book book) {
@@ -25,6 +27,8 @@ public class BookFormDialog extends JDialog {
         add(new JLabel("Pages")); add(pagesField);
         add(new JLabel("Rating")); add(ratingField);
         add(new JLabel("Language")); add(langField);
+        add(new JLabel("Description")); add(descField);
+        add(new JLabel("Image URL")); add(imageField);
         JButton okBtn = new JButton("OK");
         JButton cancelBtn = new JButton("Cancel");
         add(okBtn); add(cancelBtn);
@@ -38,13 +42,15 @@ public class BookFormDialog extends JDialog {
             pagesField.setText(String.valueOf(book.getPageCount()));
             ratingField.setText(String.valueOf(book.getRating()));
             langField.setText(book.getLanguage());
+            descField.setText(book.getDescription());
+            imageField.setText(book.getImageUrl());
         }
 
         okBtn.addActionListener(e -> {
             if (idField.getText().isBlank() || titleField.getText().isBlank() ||
                     authorField.getText().isBlank() || genreField.getText().isBlank() ||
                     pagesField.getText().isBlank() || ratingField.getText().isBlank() ||
-                    langField.getText().isBlank()) {
+                    langField.getText().isBlank() || descField.getText().isBlank() || imageField.getText().isBlank()) {
                 JOptionPane.showMessageDialog(this, "Please fill all fields");
                 return;
             }
@@ -71,6 +77,8 @@ public class BookFormDialog extends JDialog {
                 genreField.getText(),
                 Integer.parseInt(pagesField.getText()),
                 Double.parseDouble(ratingField.getText()),
-                langField.getText());
+                langField.getText(),
+                descField.getText(),
+                imageField.getText());
     }
 }

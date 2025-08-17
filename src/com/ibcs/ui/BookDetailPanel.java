@@ -15,12 +15,26 @@ import java.io.IOException;
 public class BookDetailPanel extends JPanel {
     public BookDetailPanel(MainFrame frame, Book book, RatingDatabase ratingDb, User user, BookmarkDatabase bookmarkDb) {
         setLayout(new BorderLayout());
-        JTextArea info = new JTextArea(book.getTitle() + "\n" + book.getAuthor() + "\n" + book.getGenre() + "\n" + book.getPageCount() + " pages\n" + book.getRating() + " rating\n" + book.getLanguage());
+
+        JLabel cover = new JLabel();
+        try {
+            cover.setIcon(new ImageIcon(new java.net.URL(book.getImageUrl())));
+        } catch (Exception ignored) {}
+        cover.setBorder(new EmptyBorder(20,20,20,20));
+        add(cover, BorderLayout.WEST);
+
+        JTextArea info = new JTextArea(book.getTitle() + "\n" +
+                book.getAuthor() + "\n" + book.getGenre() + "\n" +
+                book.getPageCount() + " pages\n" +
+                book.getRating() + " rating\n" + book.getLanguage() +
+                "\n\n" + book.getDescription());
+        info.setLineWrap(true);
+        info.setWrapStyleWord(true);
         info.setEditable(false);
         info.setBackground(new Color(0x121212));
         info.setForeground(Color.WHITE);
         info.setBorder(new EmptyBorder(20,20,20,20));
-        add(info, BorderLayout.CENTER);
+        add(new JScrollPane(info), BorderLayout.CENTER);
 
         JPanel bottom = new JPanel(new FlowLayout(FlowLayout.LEFT,10,10));
         bottom.setBackground(new Color(0x181818));

@@ -78,8 +78,12 @@ public class LoginPanel extends JPanel {
         register.addMouseListener(new java.awt.event.MouseAdapter() {
             @Override
             public void mouseClicked(java.awt.event.MouseEvent e) {
-                JOptionPane.showMessageDialog(LoginPanel.this,
-                        "Registration feature not implemented in this prototype.");
+                RegisterDialog dialog = new RegisterDialog((JFrame) SwingUtilities.getWindowAncestor(LoginPanel.this), userDb);
+                dialog.setLocationRelativeTo(LoginPanel.this);
+                dialog.setVisible(true);
+                if (dialog.isSucceeded()) {
+                    JOptionPane.showMessageDialog(LoginPanel.this, "Registration successful. You can now log in.");
+                }
             }
         });
     }

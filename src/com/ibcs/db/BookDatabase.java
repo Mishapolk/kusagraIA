@@ -22,15 +22,16 @@ public class BookDatabase {
             String line = br.readLine(); // header
             while ((line = br.readLine()) != null) {
                 String[] p = line.split(",");
-                if (p.length < 7) continue;
-                books.add(new Book(p[0], p[1], p[2], p[3], Integer.parseInt(p[4]), Double.parseDouble(p[5]), p[6]));
+                if (p.length < 9) continue;
+                books.add(new Book(p[0], p[1], p[2], p[3], Integer.parseInt(p[4]),
+                        Double.parseDouble(p[5]), p[6], p[7], p[8]));
             }
         }
     }
 
     private void save() throws IOException {
         try (BufferedWriter bw = Files.newBufferedWriter(path)) {
-            bw.write("id,title,author,genre,page_count,rating,language\n");
+            bw.write("id,title,author,genre,page_count,rating,language,description,image_url\n");
             for (Book b : books) {
                 bw.write(String.join(",",
                         b.getId(),
@@ -39,7 +40,9 @@ public class BookDatabase {
                         b.getGenre(),
                         String.valueOf(b.getPageCount()),
                         String.valueOf(b.getRating()),
-                        b.getLanguage()));
+                        b.getLanguage(),
+                        b.getDescription(),
+                        b.getImageUrl()));
                 bw.write("\n");
             }
         }

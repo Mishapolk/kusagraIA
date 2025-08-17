@@ -25,6 +25,8 @@ public class BookCard extends JPanel {
         final int w = 120, h = 180;
         JLabel img = new JLabel();
         img.setPreferredSize(new Dimension(w, h));
+        img.setHorizontalAlignment(SwingConstants.CENTER);
+        img.setVerticalAlignment(SwingConstants.CENTER);
         img.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
         add(img, BorderLayout.CENTER);
 

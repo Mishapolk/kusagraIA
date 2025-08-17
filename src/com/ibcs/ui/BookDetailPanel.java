@@ -36,6 +36,8 @@ public class BookDetailPanel extends JPanel {
         final int coverW = 150, coverH = 220;
         JLabel cover = new JLabel();
         cover.setPreferredSize(new Dimension(coverW, coverH));
+        cover.setHorizontalAlignment(SwingConstants.CENTER);
+        cover.setVerticalAlignment(SwingConstants.CENTER);
         left.add(cover, BorderLayout.CENTER);
         ImageLoader.load(book.getImageUrl(), coverW, coverH, cover::setIcon);
 

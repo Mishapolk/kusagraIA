@@ -45,7 +45,10 @@ public class ImageLoader {
     }
 
     private static Image scale(BufferedImage img, int maxWidth, int maxHeight) {
-        double scale = Math.min((double)maxWidth / img.getWidth(), (double)maxHeight / img.getHeight());
+        double scale = Math.min(
+                1.0,
+                Math.min((double) maxWidth / img.getWidth(),
+                        (double) maxHeight / img.getHeight()));
         int w = (int) Math.round(img.getWidth() * scale);
         int h = (int) Math.round(img.getHeight() * scale);
         return img.getScaledInstance(w, h, Image.SCALE_SMOOTH);

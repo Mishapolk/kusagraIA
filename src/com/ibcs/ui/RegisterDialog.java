@@ -10,14 +10,14 @@ import java.util.UUID;
 
 public class RegisterDialog extends JDialog {
     private boolean succeeded = false;
-    private JTextField userField = new JTextField(15);
+    private JTextField emailField = new JTextField(15);
     private JPasswordField passField = new JPasswordField(15);
 
     public RegisterDialog(JFrame owner, UserDatabase userDb) {
         super(owner, "Register", true);
         setLayout(new GridLayout(0,2,5,5));
-        add(new JLabel("Username"));
-        add(userField);
+        add(new JLabel("Email"));
+        add(emailField);
         add(new JLabel("Password"));
         add(passField);
         JButton ok = new JButton("Create");
@@ -26,18 +26,18 @@ public class RegisterDialog extends JDialog {
         pack();
 
         ok.addActionListener(e -> {
-            String username = userField.getText();
+            String email = emailField.getText();
             String password = new String(passField.getPassword());
-            if (username.isBlank() || password.isBlank()) {
+            if (email.isBlank() || password.isBlank()) {
                 JOptionPane.showMessageDialog(this, "Please fill all fields");
                 return;
             }
-            if (userDb.usernameExists(username)) {
-                JOptionPane.showMessageDialog(this, "Username already exists");
+            if (userDb.emailExists(email)) {
+                JOptionPane.showMessageDialog(this, "Email already exists");
                 return;
             }
             try {
-                userDb.add(new User(UUID.randomUUID().toString(), username, password, false));
+                userDb.add(new User(UUID.randomUUID().toString(), email, password, false));
                 succeeded = true;
                 setVisible(false);
             } catch (IOException ex) {

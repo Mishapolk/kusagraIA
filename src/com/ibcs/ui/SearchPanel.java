@@ -5,12 +5,11 @@ import com.ibcs.db.BookmarkDatabase;
 import com.ibcs.db.SearchLogDatabase;
 import com.ibcs.model.Book;
 import com.ibcs.model.User;
+import com.ibcs.ui.BookCard;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
-import java.awt.BorderLayout;
-import java.awt.Color;
-import java.awt.FlowLayout;
+import java.awt.*;
 import java.io.IOException;
 import java.util.Comparator;
 import java.util.List;
@@ -51,18 +50,21 @@ public class SearchPanel extends JPanel {
         filters.add(new JLabel("Sort")); filters.add(sortBox);
         filters.add(resetBtn);
 
-        DefaultListModel<Book> model = new DefaultListModel<>();
-        JList<Book> list = new JList<>(model);
-        list.setBackground(new Color(0x121212));
-        list.setForeground(Color.WHITE);
-        add(top, BorderLayout.NORTH);
-        add(filters, BorderLayout.CENTER);
-        add(new JScrollPane(list), BorderLayout.SOUTH);
+        JPanel grid = new JPanel(new GridLayout(0,3,10,10));
+        grid.setBorder(new EmptyBorder(20,20,20,20));
+        grid.setOpaque(false);
+        JPanel header = new JPanel(new BorderLayout());
+        header.add(top, BorderLayout.NORTH);
+        header.add(filters, BorderLayout.SOUTH);
+        add(header, BorderLayout.NORTH);
+        JScrollPane scroll = new JScrollPane(grid);
+        scroll.setBorder(null);
+        add(scroll, BorderLayout.CENTER);
 
         backBtn.addActionListener(e -> frame.showHome());
 
         searchBtn.addActionListener(e -> {
-            model.clear();
+            grid.removeAll();
             String q = searchField.getText().toLowerCase();
             String genre = (String)genreBox.getSelectedItem();
             if (genre != null && genre.isEmpty()) genre = null;
@@ -86,7 +88,11 @@ public class SearchPanel extends JPanel {
                 results.sort(Comparator.comparingInt(Book::getPageCount));
             }
 
-            for (Book b: results) model.addElement(b);
+            for (Book b: results) {
+                grid.add(new BookCard(b, () -> frame.showBookDetail(b)));
+            }
+            grid.revalidate();
+            grid.repaint();
 
             String logQuery = String.format("q=%s,genre=%s,author=%s,lang=%s,rating>=%.1f",
                     q, genre, author, lang, rating);
@@ -104,14 +110,9 @@ public class SearchPanel extends JPanel {
             langField.setText("");
             ratingSpinner.setValue(0.0);
             sortBox.setSelectedIndex(0);
-            model.clear();
-        });
-
-        list.addListSelectionListener(e -> {
-            if (!e.getValueIsAdjusting()) {
-                Book b = list.getSelectedValue();
-                if (b != null) frame.showBookDetail(b);
-            }
+            grid.removeAll();
+            grid.revalidate();
+            grid.repaint();
         });
     }
 }

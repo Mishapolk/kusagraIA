@@ -30,9 +30,9 @@ public class LoginPanel extends JPanel {
         card.add(title);
         card.add(Box.createVerticalStrut(20));
 
-        JTextField userField = new JTextField();
-        userField.putClientProperty("JTextField.placeholderText", "Username");
-        card.add(userField);
+        JTextField emailField = new JTextField();
+        emailField.putClientProperty("JTextField.placeholderText", "Email");
+        card.add(emailField);
         card.add(Box.createVerticalStrut(10));
 
         JPasswordField passField = new JPasswordField();
@@ -61,13 +61,13 @@ public class LoginPanel extends JPanel {
         add(card);
 
         loginButton.addActionListener((ActionEvent e) -> {
-            String username = userField.getText();
+            String email = emailField.getText();
             String password = new String(passField.getPassword());
-            if (username.isBlank() || password.isBlank()) {
+            if (email.isBlank() || password.isBlank()) {
                 JOptionPane.showMessageDialog(this, "Please fill all fields");
                 return;
             }
-            Optional<User> user = userDb.authenticate(username, password);
+            Optional<User> user = userDb.authenticate(email, password);
             if (user.isPresent()) {
                 frame.loginSuccess(user.get());
             } else {

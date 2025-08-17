@@ -4,12 +4,11 @@ import com.ibcs.db.BookDatabase;
 import com.ibcs.db.BookmarkDatabase;
 import com.ibcs.model.Book;
 import com.ibcs.model.User;
+import com.ibcs.ui.BookCard;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
-import java.awt.BorderLayout;
-import java.awt.Color;
-import java.awt.FlowLayout;
+import java.awt.*;
 import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -30,16 +29,15 @@ public class RecommendationPanel extends JPanel {
         top.add(getBtn); top.add(backBtn);
         add(top, BorderLayout.NORTH);
 
-        DefaultListModel<Book> model = new DefaultListModel<>();
-        JList<Book> list = new JList<>(model);
-        list.setBackground(new Color(0x121212));
-        list.setForeground(Color.WHITE);
-        JScrollPane scroll = new JScrollPane(list);
-        scroll.setBorder(new EmptyBorder(20,20,20,20));
+        JPanel grid = new JPanel(new GridLayout(0,3,10,10));
+        grid.setBorder(new EmptyBorder(20,20,20,20));
+        grid.setOpaque(false);
+        JScrollPane scroll = new JScrollPane(grid);
+        scroll.setBorder(null);
         add(scroll, BorderLayout.CENTER);
 
         getBtn.addActionListener(e -> {
-            model.clear();
+            grid.removeAll();
             String genre = (String)genreBox.getSelectedItem();
             int maxPages;
             try {
@@ -53,14 +51,12 @@ public class RecommendationPanel extends JPanel {
                     .filter(b -> b.getGenre().equalsIgnoreCase(genre) && b.getPageCount() <= finalMax)
                     .collect(Collectors.toList());
             Collections.shuffle(filtered);
-            for (int i=0; i<Math.min(5, filtered.size()); i++) model.addElement(filtered.get(i));
-        });
-
-        list.addListSelectionListener(e -> {
-            if (!e.getValueIsAdjusting()) {
-                Book b = list.getSelectedValue();
-                if (b != null) frame.showBookDetail(b);
+            for (int i=0; i<Math.min(5, filtered.size()); i++) {
+                Book b = filtered.get(i);
+                grid.add(new BookCard(b, () -> frame.showBookDetail(b)));
             }
+            grid.revalidate();
+            grid.repaint();
         });
         backBtn.addActionListener(e -> frame.showHome());
     }

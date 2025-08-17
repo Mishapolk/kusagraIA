@@ -7,39 +7,79 @@ import com.ibcs.model.User;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
-import java.awt.BorderLayout;
-import java.awt.Color;
-import java.awt.FlowLayout;
+import java.awt.*;
 import java.io.IOException;
 
 public class BookDetailPanel extends JPanel {
     public BookDetailPanel(MainFrame frame, Book book, RatingDatabase ratingDb, User user, BookmarkDatabase bookmarkDb) {
         setLayout(new BorderLayout());
 
+        // left column with title, genre, cover, author/page count
+        JPanel left = new JPanel();
+        left.setLayout(new BorderLayout());
+        left.setBorder(new EmptyBorder(20,20,20,20));
+        left.setOpaque(false);
+
+        JPanel top = new JPanel();
+        top.setLayout(new BoxLayout(top, BoxLayout.Y_AXIS));
+        top.setOpaque(false);
+        JLabel title = new JLabel(book.getTitle(), SwingConstants.CENTER);
+        title.setAlignmentX(Component.CENTER_ALIGNMENT);
+        title.setForeground(Color.WHITE);
+        JLabel genre = new JLabel(book.getGenre(), SwingConstants.CENTER);
+        genre.setAlignmentX(Component.CENTER_ALIGNMENT);
+        genre.setForeground(Color.LIGHT_GRAY);
+        top.add(title);
+        top.add(genre);
+        left.add(top, BorderLayout.NORTH);
+
         JLabel cover = new JLabel();
         try {
-            cover.setIcon(new ImageIcon(new java.net.URL(book.getImageUrl())));
+            ImageIcon icon = new ImageIcon(new java.net.URL(book.getImageUrl()));
+            Image scaled = icon.getImage().getScaledInstance(150, 220, Image.SCALE_SMOOTH);
+            cover.setIcon(new ImageIcon(scaled));
         } catch (Exception ignored) {}
-        cover.setBorder(new EmptyBorder(20,20,20,20));
-        add(cover, BorderLayout.WEST);
+        left.add(cover, BorderLayout.CENTER);
 
-        JTextArea info = new JTextArea(book.getTitle() + "\n" +
-                book.getAuthor() + "\n" + book.getGenre() + "\n" +
-                book.getPageCount() + " pages\n" +
-                book.getRating() + " rating\n" + book.getLanguage() +
-                "\n\n" + book.getDescription());
-        info.setLineWrap(true);
-        info.setWrapStyleWord(true);
-        info.setEditable(false);
-        info.setBackground(new Color(0x121212));
-        info.setForeground(Color.WHITE);
-        info.setBorder(new EmptyBorder(20,20,20,20));
-        add(new JScrollPane(info), BorderLayout.CENTER);
+        JPanel meta = new JPanel(new BorderLayout());
+        meta.setOpaque(false);
+        JLabel author = new JLabel(book.getAuthor());
+        author.setForeground(Color.WHITE);
+        JLabel pages = new JLabel(book.getPageCount() + " pages", SwingConstants.RIGHT);
+        pages.setForeground(Color.WHITE);
+        meta.add(author, BorderLayout.WEST);
+        meta.add(pages, BorderLayout.EAST);
+        left.add(meta, BorderLayout.SOUTH);
+        add(left, BorderLayout.WEST);
+
+        // right column with language, rating, description
+        JPanel right = new JPanel();
+        right.setLayout(new BoxLayout(right, BoxLayout.Y_AXIS));
+        right.setBorder(new EmptyBorder(20,20,20,20));
+        right.setBackground(new Color(0x121212));
+        JLabel language = new JLabel("Language: " + book.getLanguage());
+        language.setForeground(Color.WHITE);
+        JLabel ratingLabel = new JLabel("Rating: " + book.getRating());
+        ratingLabel.setForeground(Color.WHITE);
+        JTextArea desc = new JTextArea(book.getDescription());
+        desc.setLineWrap(true);
+        desc.setWrapStyleWord(true);
+        desc.setEditable(false);
+        desc.setBackground(new Color(0x121212));
+        desc.setForeground(Color.WHITE);
+        JScrollPane descScroll = new JScrollPane(desc);
+        descScroll.setBorder(null);
+        right.add(language);
+        right.add(Box.createVerticalStrut(5));
+        right.add(ratingLabel);
+        right.add(Box.createVerticalStrut(10));
+        right.add(descScroll);
+        add(right, BorderLayout.CENTER);
 
         JPanel bottom = new JPanel(new FlowLayout(FlowLayout.LEFT,10,10));
         bottom.setBackground(new Color(0x181818));
         JButton backBtn = new JButton("Back");
-        JButton bookmarkBtn = new JButton("Bookmark");
+        JButton bookmarkBtn = new JButton();
         bottom.add(backBtn); bottom.add(bookmarkBtn);
 
         JSpinner ratingSpinner = new JSpinner(new SpinnerNumberModel(5,1,5,1));
@@ -58,12 +98,19 @@ public class BookDetailPanel extends JPanel {
         reviewScroll.setBorder(new EmptyBorder(20,20,20,20));
         add(reviewScroll, BorderLayout.EAST);
         refreshReviews(ratingDb, book, reviews);
+        boolean[] bookmarked = {bookmarkDb.getBookmarks(user.getId()).contains(book.getId())};
+        updateBookmarkText(bookmarkBtn, bookmarked[0]);
 
         backBtn.addActionListener(e -> frame.showHome());
         bookmarkBtn.addActionListener(e -> {
             try {
-                bookmarkDb.add(user.getId(), book.getId());
-                JOptionPane.showMessageDialog(this, "Book bookmarked");
+                if (bookmarked[0]) {
+                    bookmarkDb.remove(user.getId(), book.getId());
+                } else {
+                    bookmarkDb.add(user.getId(), book.getId());
+                }
+                bookmarked[0] = !bookmarked[0];
+                updateBookmarkText(bookmarkBtn, bookmarked[0]);
             } catch (IOException ex) {
                 ex.printStackTrace();
             }
@@ -89,5 +136,9 @@ public class BookDetailPanel extends JPanel {
             sb.append(r[0]).append(": ").append(r[2]).append(" stars - ").append(r[3]).append("\n");
         }
         reviews.setText(sb.toString());
+    }
+
+    private void updateBookmarkText(JButton btn, boolean bookmarked) {
+        btn.setText(bookmarked ? "Remove Bookmark" : "Bookmark");
     }
 }

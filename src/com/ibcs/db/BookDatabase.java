@@ -21,7 +21,7 @@ public class BookDatabase {
         try (BufferedReader br = Files.newBufferedReader(path)) {
             String line = br.readLine(); // header
             while ((line = br.readLine()) != null) {
-                String[] p = line.split(",");
+                String[] p = parse(line);
                 if (p.length < 9) continue;
                 books.add(new Book(p[0], p[1], p[2], p[3], Integer.parseInt(p[4]),
                         Double.parseDouble(p[5]), p[6], p[7], p[8]));
@@ -34,18 +34,45 @@ public class BookDatabase {
             bw.write("id,title,author,genre,page_count,rating,language,description,image_url\n");
             for (Book b : books) {
                 bw.write(String.join(",",
-                        b.getId(),
-                        b.getTitle(),
-                        b.getAuthor(),
-                        b.getGenre(),
+                        escape(b.getId()),
+                        escape(b.getTitle()),
+                        escape(b.getAuthor()),
+                        escape(b.getGenre()),
                         String.valueOf(b.getPageCount()),
                         String.valueOf(b.getRating()),
-                        b.getLanguage(),
-                        b.getDescription(),
-                        b.getImageUrl()));
+                        escape(b.getLanguage()),
+                        escape(b.getDescription()),
+                        escape(b.getImageUrl())));
                 bw.write("\n");
             }
         }
+    }
+
+    private String[] parse(String line) {
+        java.util.List<String> fields = new java.util.ArrayList<>();
+        StringBuilder sb = new StringBuilder();
+        boolean inQuotes = false;
+        for (int i = 0; i < line.length(); i++) {
+            char c = line.charAt(i);
+            if (c == '"') {
+                inQuotes = !inQuotes;
+            } else if (c == ',' && !inQuotes) {
+                fields.add(sb.toString());
+                sb.setLength(0);
+            } else {
+                sb.append(c);
+            }
+        }
+        fields.add(sb.toString());
+        return fields.toArray(new String[0]);
+    }
+
+    private String escape(String field) {
+        if (field.contains("\"") || field.contains(",") || field.contains("\n")) {
+            field = field.replace("\"", "\"\"");
+            return "\"" + field + "\"";
+        }
+        return field;
     }
 
     public List<Book> getAll() { return new ArrayList<>(books); }

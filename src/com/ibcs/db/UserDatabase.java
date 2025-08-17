@@ -20,7 +20,7 @@ public class UserDatabase {
         try (BufferedReader br = Files.newBufferedReader(path)) {
             String line = br.readLine();
             while ((line = br.readLine()) != null) {
-                String[] p = line.split(",");
+                String[] p = line.split(",", -1);
                 if (p.length < 4) continue;
                 users.add(new User(p[0], p[1], p[2], Boolean.parseBoolean(p[3])));
             }
@@ -29,17 +29,17 @@ public class UserDatabase {
 
     private void save() throws IOException {
         try (BufferedWriter bw = Files.newBufferedWriter(path)) {
-            bw.write("id,username,password,isAdmin\n");
+            bw.write("id,email,password,isAdmin\n");
             for (User u : users) {
-                bw.write(String.join(",", u.getId(), u.getUsername(), u.getPassword(), String.valueOf(u.isAdmin())));
+                bw.write(String.join(",", u.getId(), u.getEmail(), u.getPassword(), String.valueOf(u.isAdmin())));
                 bw.write("\n");
             }
         }
     }
 
-    public Optional<User> authenticate(String username, String password) {
+    public Optional<User> authenticate(String email, String password) {
         return users.stream()
-                .filter(u -> u.getUsername().equals(username) && u.getPassword().equals(password))
+                .filter(u -> u.getEmail().equals(email) && u.getPassword().equals(password))
                 .findFirst();
     }
 
@@ -58,7 +58,7 @@ public class UserDatabase {
         save();
     }
 
-    public boolean usernameExists(String username) {
-        return users.stream().anyMatch(u -> u.getUsername().equals(username));
+    public boolean emailExists(String email) {
+        return users.stream().anyMatch(u -> u.getEmail().equals(email));
     }
 }

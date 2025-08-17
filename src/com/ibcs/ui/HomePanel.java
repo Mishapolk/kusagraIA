@@ -4,6 +4,7 @@ import com.ibcs.db.BookDatabase;
 import com.ibcs.db.BookmarkDatabase;
 import com.ibcs.model.Book;
 import com.ibcs.model.User;
+import com.ibcs.ui.BookCard;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
@@ -37,22 +38,18 @@ public class HomePanel extends JPanel {
         top.add(logoutBtn);
         add(top, BorderLayout.NORTH);
 
-        JPanel booksPanel = new JPanel();
-        booksPanel.setLayout(new GridLayout(0,1,0,10));
+        JPanel booksPanel = new JPanel(new GridLayout(0,3,10,10));
         booksPanel.setBorder(new EmptyBorder(20,20,20,20));
         booksPanel.setOpaque(false);
-        add(new JScrollPane(booksPanel), BorderLayout.CENTER);
+        JScrollPane scroll = new JScrollPane(booksPanel);
+        scroll.setBorder(null);
+        add(scroll, BorderLayout.CENTER);
 
         List<Book> all = bookDb.getAll();
         Collections.shuffle(all);
         for (int i=0; i<Math.min(3, all.size()); i++) {
             Book b = all.get(i);
-            JButton btn = new JButton(b.toString());
-            btn.setHorizontalAlignment(SwingConstants.LEFT);
-            btn.setBackground(new Color(0x1E1E1E));
-            btn.setForeground(Color.WHITE);
-            booksPanel.add(btn);
-            btn.addActionListener(e -> frame.showBookDetail(b));
+            booksPanel.add(new BookCard(b, () -> frame.showBookDetail(b)));
         }
 
         searchBtn.addActionListener(e -> frame.showSearch());

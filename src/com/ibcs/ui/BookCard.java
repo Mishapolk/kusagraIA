@@ -7,9 +7,6 @@ import javax.swing.border.EmptyBorder;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import javax.imageio.ImageIO;
-import java.awt.image.BufferedImage;
-import java.net.URL;
 
 /**
  * Small panel showing a book cover with the title underneath.
@@ -25,23 +22,29 @@ public class BookCard extends JPanel {
         setBackground(new Color(0x1E1E1E));
         setBorder(new EmptyBorder(5,5,5,5));
 
+        final int w = 120, h = 180;
         JLabel img = new JLabel();
-        try {
-            BufferedImage original = ImageIO.read(new URL(book.getImageUrl()));
-            Image scaled = original.getScaledInstance(120, 180, Image.SCALE_SMOOTH);
-            img.setIcon(new ImageIcon(scaled));
-        } catch (Exception ignored) { }
+        img.setPreferredSize(new Dimension(w, h));
+        img.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
         add(img, BorderLayout.CENTER);
+
+        ImageLoader.load(book.getImageUrl(), w, h, icon -> {
+            img.setIcon(icon);
+        });
 
         JLabel title = new JLabel("<html><div style='text-align:center;color:white;'>" + book.getTitle() + "</div></html>", SwingConstants.CENTER);
         add(title, BorderLayout.SOUTH);
 
-        setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-        addMouseListener(new MouseAdapter() {
+        Cursor hand = Cursor.getPredefinedCursor(Cursor.HAND_CURSOR);
+        setCursor(hand);
+        MouseAdapter click = new MouseAdapter() {
             @Override public void mouseClicked(MouseEvent e) {
                 onClick.run();
             }
-        });
+        };
+        addMouseListener(click);
+        img.addMouseListener(click);
+        title.addMouseListener(click);
     }
 
     public Book getBook() { return book; }
